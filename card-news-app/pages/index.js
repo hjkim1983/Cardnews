@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const Container = styled.div`
   display: flex;
@@ -85,11 +85,6 @@ const FooterTitle = styled.h3`
   margin-bottom: 10px;
 `;
 
-const DataDisplay = styled.div`
-  display: flex;
-  justify-content: space-around;
-`;
-
 const newsData = [
   {
     title: "윤석열 전 대통령 검찰 수사 및 체포 가능성 제기",
@@ -119,47 +114,6 @@ const newsData = [
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [bitcoinPrice, setBitcoinPrice] = useState(null);
-  const [nasdaqIndex, setNasdaqIndex] = useState(null);
-
-  useEffect(() => {
-    // 비트코인 가격 API 호출
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setBitcoinPrice(data.bitcoin.usd); // 비트코인 가격 설정
-      })
-      .catch(error => {
-        console.error('CoinGecko API 오류:', error);
-        setBitcoinPrice('API 호출 오류');
-      });
-
-    // 나스닥 지수 API 호출
-    fetch('https://query1.finance.yahoo.com/v7/finance/quote?symbols=^IXIC')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        const price = data.quoteResponse.result[0]?.regularMarketPrice;
-        if (price) {
-          setNasdaqIndex(price);
-        } else {
-          setNasdaqIndex('나스닥 데이터를 가져오는 데 실패했습니다.');
-        }
-      })
-      .catch(error => {
-        console.error("나스닥 API 호출 오류:", error);
-        setNasdaqIndex('API 호출 오류');
-      });
-  }, []);
 
   const filteredNews = newsData.filter(news =>
     news.title.includes(searchTerm) || news.content.includes(searchTerm)
@@ -188,10 +142,9 @@ export default function Home() {
       </CardGrid>
       <Footer>
         <FooterTitle>Today's Market Updates</FooterTitle>
-        <DataDisplay>
-          <div>비트코인: {bitcoinPrice ? `${bitcoinPrice} USD` : '로딩 중...'}</div>
-          <div>나스닥: {nasdaqIndex ? `${nasdaqIndex}` : '로딩 중...'}</div>
-        </DataDisplay>
+        <div>
+          {/* 비트코인 및 나스닥 지수 부분은 제거되었습니다. */}
+        </div>
       </Footer>
     </Container>
   );
